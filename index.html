@@ -27,6 +27,18 @@
     background: #000000;
 }
 
+#basemapToggleBtn {
+      position: absolute;
+      top: 20px;
+      right: 50px;
+      z-index: 50;
+      background-color: black;
+      
+      cursor: pointer;
+      padding: 5;
+      color:aliceblue;
+    }
+
 
   </style>
 </head>
@@ -34,6 +46,7 @@
   <div id="viewDiv"></div>
   <div id="timeSlider"></div>
   <div id="sliceDiv" class="esri-widget"></div>
+  <button id="basemapToggleBtn">Basemap OFF</button>
 
   <script>
     require([
@@ -130,7 +143,7 @@ esriId.checkSignInStatus(info.portalUrl + "/sharing").then(() => {
     
   });
 
-            const itemUrl1 = "https://esriserver.aecon.com/server/rest/services/Hosted/GenericModel_Merge_new/SceneServer/layers"
+            const itemUrl1 = "https://esriserver.aecon.com/server/rest/services/Hosted/DNNP_GIS_Storymap_Reactor_3/SceneServer/layers"
             const itemUrl2 = "https://esriserver.aecon.com/server/rest/services/Hosted/Final_DNNP_4D_ver2_WSL1/SceneServer/layers/0";
             // Get the token
             var portalUrl = "https://esri.aecon.com/portal";
@@ -181,7 +194,7 @@ esriId.checkSignInStatus(info.portalUrl + "/sharing").then(() => {
               popupEnabled: true
             });
 
-            map.add(sceneLayer_transp);
+            //map.add(sceneLayer_transp);
             map.add(sceneLayer);
 /////////////////////////////////////// End Portal ///////////////////////////////////////
 
@@ -272,7 +285,7 @@ esriId.checkSignInStatus(info.portalUrl + "/sharing").then(() => {
           console.log("Min Date: ", formattedMinDate);
           console.log("Max Date: ", formattedMaxDate);
           // Add one day to the maxDate
-          const oneDay = 5 * 24 * 60 * 60 * 1000; // One day in milliseconds
+          const oneDay = 1 * 24 * 60 * 60 * 1000; // One day in milliseconds
           maxDate2 = new Date(maxDate);
           minDate2 = new Date(minDate);
          
@@ -300,6 +313,27 @@ esriId.checkSignInStatus(info.portalUrl + "/sharing").then(() => {
       }).catch(function (error) {
         console.error("Error querying features: ", error);
       });
+
+
+
+        // Add event listener to the button for toggling basemap visibility
+        document.getElementById("basemapToggleBtn").addEventListener("click", function() {
+        // Toggle the visibility of the basemap layer
+        //map.basemap.baseLayers.getItemAt(0).visible = !map.basemap.baseLayers.getItemAt(0).visible;
+         if(map.basemap.baseLayers.getItemAt(0).opacity != 0 ) {
+            map.basemap.baseLayers.getItemAt(0).opacity = 0;
+            map.ground.opacity = 0;
+            document.getElementById("basemapToggleBtn").textContent = "Basemap ON"
+         }else{
+            map.basemap.baseLayers.getItemAt(0).opacity = 0.5;
+            map.ground.opacity = 0.7;
+            document.getElementById("basemapToggleBtn").textContent = "Basemap OFF"
+         }
+        
+      });
+
+
+
     });
   </script>
 </body>
